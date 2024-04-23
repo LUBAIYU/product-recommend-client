@@ -1,11 +1,11 @@
 import request from '@/util/request'
 
 //上传用户头像
-export const uploadAvatarAPI = (multipartFile: any) => {
+export const uploadAvatarAPI = (data: any) => {
   return request({
     method: 'POST',
     url: '/user/upload/avatar',
-    data: multipartFile
+    data
   }) as Promise<API.Result>
 }
 

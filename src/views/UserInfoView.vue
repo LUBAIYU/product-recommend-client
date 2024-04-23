@@ -1,8 +1,9 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { onMounted, ref } from 'vue'
 import { updateUserInfoAPI, uploadAvatarAPI } from '@/apis/user'
-import { showFailToast, showSuccessToast } from 'vant'
+import { showFailToast, showSuccessToast, type UploaderFileListItem } from 'vant'
 import { useRouter } from 'vue-router'
+import { getCurrentUser } from '@/states/userState'
 
 const router = useRouter()
 //用户信息
@@ -20,13 +21,16 @@ const userInfo = ref<API.UserInfo>({
 })
 
 //上传组件绑定的属性
-const userAvatar = ref([])
+const userAvatar = ref<UploaderFileListItem[]>([])
 
 //上传图片
 const uploadAvatar = async (file: any) => {
-  const res = await uploadAvatarAPI(file)
+  const formData = new FormData()
+  formData.append('multipartFile', file.file)
+  const res = await uploadAvatarAPI(formData)
   if (res.code === 200) {
     userInfo.value.userAvatar = res.data
+    userAvatar.value = [{ url: userInfo.value.userAvatar, isImage: true }]
   } else {
     showFailToast(res.message)
   }
@@ -43,19 +47,27 @@ const updateUserInfo = async () => {
   }
 }
 
+//获取登录用户信息
+const getLoginUser = () => {
+  const loginUser = getCurrentUser()
+  if (loginUser) {
+    userInfo.value = loginUser
+    userInfo.value.gender = userInfo.value.gender + ''
+    userAvatar.value = [{ url: userInfo.value.userAvatar, isImage: true }]
+  }
+}
+
+onMounted(() => getLoginUser())
 </script>
 
 <template>
+  <div class="avatar-style">
+    <van-uploader preview-size="200" v-model="userAvatar" :after-read="uploadAvatar"
+                  :max-count="1">
+    </van-uploader>
+  </div>
   <van-form @submit="updateUserInfo">
     <van-cell-group inset>
-      <van-field label="头像">
-        <template #input>
-          <van-image
-            :src="userInfo.userAvatar"
-            fit="contain" v-if="userInfo.userAvatar != ''" />
-          <van-uploader v-model="userAvatar" :after-read="uploadAvatar" :max-count="1"></van-uploader>
-        </template>
-      </van-field>
       <van-field
         v-model="userInfo.userName"
         name="用户名"
@@ -100,5 +112,10 @@ const updateUserInfo = async () => {
 </template>
 
 <style scoped>
-
+.avatar-style {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 20px 0 20px 0;
+}
 </style>

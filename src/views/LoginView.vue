@@ -18,7 +18,7 @@ const userLogin = async () => {
   if (res.code === 200) {
     showSuccessToast('登录成功')
     setCurrentUser(res.data)
-    await router.push('/')
+    await router.push('/product')
   } else {
     showFailToast(res.message)
   }
