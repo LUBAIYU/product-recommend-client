@@ -1,4 +1,9 @@
 <script setup lang="ts">
+import {useRouter} from 'vue-router'
+
+const router = useRouter()
+
+//判断是否登录
 
 </script>
 
