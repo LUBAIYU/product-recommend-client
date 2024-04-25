@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import { getCurrentUser } from '@/states/userState'
 import { showFailToast } from 'vant'
+import { getLoginUserAPI } from '@/apis/user'
+import { useUserStore } from '@/stores/userStore'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -28,19 +29,31 @@ const router = createRouter({
       path: '/info',
       name: '个人信息',
       component: () => import('../views/UserInfoView.vue')
+    },
+    {
+      path: '/search',
+      name: '搜索',
+      component: () => import('../views/SearchView.vue')
     }
   ]
 })
 
-router.beforeEach((to) => {
+router.beforeEach(async (to) => {
+  const userStore = useUserStore()
   if (to.name === '登录' || to.name === '注册') {
     return true
   }
-  const loginUser = getCurrentUser()
-  if (!loginUser) {
-    showFailToast('未登录')
-    return { name: '登录' }
+  const loginUser = userStore.getCurrentUser()
+  if (loginUser) {
+    return
   }
+  const res = await getLoginUserAPI()
+  if (res.code === 200) {
+    userStore.setCurrentUser(res.data)
+    return
+  }
+  showFailToast('未登录')
+  return { name: '登录' }
 })
 
 export default router

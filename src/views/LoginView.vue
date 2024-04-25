@@ -3,21 +3,27 @@ import { ref } from 'vue'
 import { LoginAPI } from '@/apis/user'
 import { showFailToast, showSuccessToast } from 'vant'
 import { useRouter } from 'vue-router'
-import { setCurrentUser } from '@/states/userState'
+import { useUserStore } from '@/stores/userStore'
 
+const userStore = useUserStore()
 const router = useRouter()
 //登录信息
 const form = ref<API.LoginParams>({
   userName: '',
-  userPassword: ''
+  userPassword: '',
+  isClient: true
 })
 
 //用户登录
 const userLogin = async () => {
-  const res = await LoginAPI(form.value)
+  const res = await LoginAPI({
+    userName: form.value.userName,
+    userPassword: form.value.userPassword,
+    isClient: form.value.isClient
+  })
   if (res.code === 200) {
     showSuccessToast('登录成功')
-    setCurrentUser(res.data)
+    userStore.setCurrentUser(res.data)
     await router.push('/product')
   } else {
     showFailToast(res.message)

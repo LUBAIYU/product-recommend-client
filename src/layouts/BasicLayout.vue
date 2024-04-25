@@ -3,9 +3,9 @@
 </script>
 
 <template>
-  <van-nav-bar title="主页" left-arrow>
+  <van-nav-bar title="主页" left-arrow @click-left="$router.back()">
     <template #right>
-      <van-icon name="search" size="18" />
+      <van-icon name="search" size="18" @click="$router.push('/search')" />
     </template>
   </van-nav-bar>
   <div id="content">

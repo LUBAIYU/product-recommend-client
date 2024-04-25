@@ -3,8 +3,9 @@ import { onMounted, ref } from 'vue'
 import { updateUserInfoAPI, uploadAvatarAPI } from '@/apis/user'
 import { showFailToast, showSuccessToast, type UploaderFileListItem } from 'vant'
 import { useRouter } from 'vue-router'
-import { getCurrentUser } from '@/states/userState'
+import { useUserStore } from '@/stores/userStore'
 
+const userStore = useUserStore()
 const router = useRouter()
 //用户信息
 const userInfo = ref<API.UserInfo>({
@@ -49,7 +50,7 @@ const updateUserInfo = async () => {
 
 //获取登录用户信息
 const getLoginUser = () => {
-  const loginUser = getCurrentUser()
+  const loginUser = userStore.getCurrentUser()
   if (loginUser) {
     userInfo.value = loginUser
     userInfo.value.gender = userInfo.value.gender + ''

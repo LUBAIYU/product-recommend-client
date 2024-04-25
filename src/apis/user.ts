@@ -35,3 +35,11 @@ export const RegisterAPI = (data: API.RegisterParams) => {
     data
   }) as Promise<API.Result>
 }
+
+//获取当前登录用户
+export const getLoginUserAPI = () => {
+  return request({
+    method: 'GET',
+    url: '/user/get/loginUser'
+  }) as Promise<API.Result>
+}
