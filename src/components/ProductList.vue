@@ -1,4 +1,7 @@
 <script setup lang="ts">
+import { addCartAPI } from '@/apis/cart'
+import { showFailToast, showSuccessToast } from 'vant'
+
 interface ProductList {
   productList: API.ProductInfo[]
 }
@@ -6,6 +9,16 @@ interface ProductList {
 const props = withDefaults(defineProps<ProductList>(), {
   productList: () => []
 })
+
+//加入购物车
+const addCart = async (productId: number | string) => {
+  const res = await addCartAPI(productId)
+  if (res.code === 200) {
+    showSuccessToast('添加成功')
+  } else {
+    showFailToast(res.message)
+  }
+}
 </script>
 
 <template>
@@ -16,7 +29,7 @@ const props = withDefaults(defineProps<ProductList>(), {
             :price="product.price"
             :thumb="product.image">
     <template #footer>
-      <van-button plain type="primary" size="mini">加入购物车</van-button>
+      <van-button plain type="primary" size="mini" @click="addCart(product.id)">加入购物车</van-button>
     </template>
   </van-card>
 </template>

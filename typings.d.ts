@@ -48,7 +48,7 @@ declare namespace API {
   };
 
   type CartInfo = {
-    id: number | string,
+    cartId: number | string,
     name: string,
     image: string,
     description: string,

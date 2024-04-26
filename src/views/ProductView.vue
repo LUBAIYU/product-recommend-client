@@ -15,7 +15,10 @@ const total = ref<number>(0)
 
 //商品推荐
 const recommendProducts = async () => {
-  const res = await recommendProductsAPI()
+  const res = await recommendProductsAPI({
+    current: current.value,
+    pageSize: pageSize.value
+  })
   if (res.code === 200) {
     productList.value = res.data.records
   } else {
@@ -23,7 +26,7 @@ const recommendProducts = async () => {
   }
 }
 
-onMounted(() => recommendProducts())
+//onMounted(() => recommendProducts())
 </script>
 
 <template>

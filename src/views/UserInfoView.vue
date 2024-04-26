@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { onMounted, ref } from 'vue'
-import { updateUserInfoAPI, uploadAvatarAPI } from '@/apis/user'
+import { logoutAPI, updateUserInfoAPI, uploadAvatarAPI } from '@/apis/user'
 import { showFailToast, showSuccessToast, type UploaderFileListItem } from 'vant'
 import { useRouter } from 'vue-router'
 import { useUserStore } from '@/stores/userStore'
@@ -58,12 +58,23 @@ const getLoginUser = () => {
   }
 }
 
+//退出登录
+const logout = async () => {
+  const res = await logoutAPI()
+  if (res.code === 200) {
+    userStore.setCurrentUser(undefined)
+    await router.push('/login')
+  } else {
+    showFailToast(res.message)
+  }
+}
+
 onMounted(() => getLoginUser())
 </script>
 
 <template>
   <div class="avatar-style">
-    <van-uploader preview-size="200" v-model="userAvatar" :after-read="uploadAvatar"
+    <van-uploader preview-size="180" v-model="userAvatar" :after-read="uploadAvatar"
                   :max-count="1">
     </van-uploader>
   </div>
@@ -108,6 +119,10 @@ onMounted(() => getLoginUser())
       <van-button round block type="primary" native-type="submit">
         保存
       </van-button>
+    </div>
+    <div style="text-align: end; margin: 10px 20px 10px 0">
+      <span style="color: #5d9ad9;cursor: pointer;"
+            @click="logout">退出登录</span>
     </div>
   </van-form>
 </template>
