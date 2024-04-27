@@ -38,7 +38,8 @@ const searchProducts = async () => {
   <ProductList :product-list="productList" />
   <van-pagination style="margin-top: 10px" v-if="productList&&productList.length>0" v-model="current"
                   :total-items="total"
-                  :items-per-page="pageSize"></van-pagination>
+                  :items-per-page="pageSize"
+                  @change="searchProducts"></van-pagination>
   <van-empty description="暂无商品" v-if="!productList||productList.length<1"></van-empty>
 </template>
 
