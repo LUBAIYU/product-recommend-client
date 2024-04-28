@@ -66,11 +66,4 @@ const userLogin = async () => {
 </template>
 
 <style scoped>
-.login-image {
-  width: 100px;
-  height: 100px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
 </style>
