@@ -29,11 +29,12 @@ const userLogin = async () => {
     showFailToast(res.message)
   }
 }
+
 </script>
 
 <template>
   <van-image style="margin-left: 38px" round width="300px" height="300px"
-             src="https://img2.imgtp.com/2024/04/23/XLgN4nom.png" fit="cover" />
+             src="src/assets/images/login.png" fit="cover" />
   <van-form @submit="userLogin">
     <van-cell-group inset>
       <van-field

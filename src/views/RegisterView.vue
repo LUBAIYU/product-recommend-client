@@ -37,7 +37,7 @@ const validatePassword = (value: any) => {
 
 <template>
   <van-image style="margin-left: 38px" round width="300px" height="300px"
-             src="https://img2.imgtp.com/2024/04/23/gUjcd5qU.png" fit="cover" />
+             src="src/assets/images/register.png" fit="cover" />
   <van-form @submit="userRegister">
     <van-cell-group inset>
       <van-field
